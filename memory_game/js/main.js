@@ -1,17 +1,4 @@
-// when 1st card is clicked on...
-	//display card 
-	//store card value
-	//start timer for first card of game
-//when second card clicked on
-	//display card
-	//store card value
-	//if same as 1st card, keep open, score +1
-	//if not same, flip both over and start again
-//when all cards flipped
-	//end game, stop timer
-
-console.log("up and running!");
-
+// intialize variables - 1 to store card objects and 1 to store cards in play
 var cards = [
 	{
 		rank: "queen",
@@ -34,28 +21,46 @@ var cards = [
 		cardImage: "images/king-of-diamonds.png"
 	}
 ];
+
 var cardsInPlay = [];
 
+//function checks if a match is present, if not resets cardsInPlay
+
 var checkForMatch = function(){
+	var result = document.getElementById("match-or-not");
+	
 	if (cardsInPlay[0] === cardsInPlay[1]){
-		alert("You found a match!");
+		result.textContent = "You found a match!";
 	} else {
-		alert("Sorry, try again.");
+		result.textContent = "Sorry, try again.";
+
 	}
+	cardsInPlay = [];
 };
 
-var flipCard = function(cardID) {
-	var card = cards[cardID];
-	console.log("User flipped " + card.rank);
-	console.log(card.suit + card.cardImage);
-	cardsInPlay.push(card.rank);
+//function whenever we click on a card to flip it over
 
+var flipCard = function() {
+	var cardId = this.getAttribute("data-id");
+	var card = cards[cardId];
+	this.setAttribute("src", card.cardImage);
+	cardsInPlay.push(card.rank);
 	if (cardsInPlay.length === 2) {
 		checkForMatch();
-	}
-
+		}
 };
 
-flipCard(0);
-flipCard(2);
+//initial function to create game board
+var createBoard = function(){
+	for (i = 0; i < cards.length; i++) {
+		var cardElement = document.createElement("img");
+		cardElement.setAttribute("src", "images/back.png");
+		cardElement.setAttribute("data-id", i)
+		cardElement.addEventListener("click", flipCard);
+		var board = document.getElementById("game-board");
+		board.appendChild(cardElement);
+	}
+};
+
+createBoard();
 
